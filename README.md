@@ -1,6 +1,6 @@
 # Music Player with Background Starter
 
-This project consists of a music player script (`music_player.py`) and a background starter script (`backgrounder.py`). The music player allows you to play meditation music and provides additional functionalities.
+This project consists of a music player script (`music_player.py`) and a background starter script (`backgrounder.py`). The music player allows you to play meditation music over 90 relaxing and meditation music and provides additional functionalities.
 
 ## Getting Started
 
