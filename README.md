@@ -7,29 +7,31 @@ This project consists of a music player script (`music_player.py`) and a backgro
 ### Prerequisites
 
 - Python 3.x
-- Pygame library: Install it using `pip install pygame`
-- Keyboard library: Install it using `pip install keyboard`
+- Run `pip install -r requirements.txt` to install all requirements.
 
 ### Usage
 
-1. Place your meditation music files in a folder (`music_folder`).
+1. Place your meditation music files in a folder (`music`).
 2. Replace `enter_key_press_sound` with the path to your Enter key press sound file.
 3. Replace `other_key_press_sounds_folder` with the path to the folder containing other key press sound files.
-4. Run `backgrounder.py` to start the music player in the background.
+4. Run `backgrounder.exe` to start the music player in the background.
+5. You can make it run on the StartUp (Follow here)[].
 
 ### Functionality
 
-- **Play/Pause**: Press 'Enter' to play/pause the current track.
-- **Next Track**: Press 'D' to skip to the next track.
-- **Volume Control**: Use 'W' to increase and 'S' to decrease the volume.
-- **Custom Sounds**: Press 'Enter' or 'Backspace' to play custom sounds.
+- **Play/Pause**: Press 'Enter'+'Shift'+'Alt' to play/pause the current track.
+- **Next Track**: Press 'D'+'Shift'+'Alt' to skip to the next track.
+- **Volume Control**: Use 'W'+'Shift'+'Alt' to increase and 'S' to decrease the volume.
 
-### Customization
-
-You can customize the key bindings and behaviors in the `music_player.py` script to suit your preferences.
 
 ## Acknowledgments
 
 - Thanks to the Pygame and Keyboard libraries for making it easy to work with audio and keyboard input in Python.
 
 Feel free to enhance and modify the scripts to better fit your needs!
+
+## StartUp
+- Press ``Start + R``.
+- Enter on the text box `shell:startup` and then `OK`.
+- Create a shortcut for `background.exe`.
+- Copy it and then Paste it in the directory opened.
