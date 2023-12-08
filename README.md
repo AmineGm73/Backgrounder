@@ -15,7 +15,7 @@ This project consists of a music player script (`music_player.py`) and a backgro
 2. Replace `enter_key_press_sound` with the path to your Enter key press sound file.
 3. Replace `other_key_press_sounds_folder` with the path to the folder containing other key press sound files.
 4. Run `backgrounder.exe` to start the music player in the background.
-5. You can make it run on the StartUp (Follow here)[https://github.com/AmineGm73/Backgrounder/blob/main/README.md#startup].
+5. You can make it run on the StartUp [Follow here](https://github.com/AmineGm73/Backgrounder/blob/main/README.md#startup).
 
 ### Functionality
 
