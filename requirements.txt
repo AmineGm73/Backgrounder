@@ -1,2 +1,7 @@
 keyboard
 pygame
+PyQt5
+Flask
+flask-socketio
+tkinterweb
+tkinter

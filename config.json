@@ -1,0 +1,13 @@
+{
+    "app": {
+        "app_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder",
+        "music_player_script_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder\\music_player.py",
+        "config_script_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder\\config.py",
+        "python": "C:\\Program Files\\Python\\python.EXE"
+    },
+    "track": {
+        "current": "[SPOTIFY-DOWNLOADER.COM] Diya.mp3",
+        "next": "[SPOTIFY-DOWNLOADER.COM] Dree.mp3",
+        "previous": "[SPOTIFY-DOWNLOADER.COM] Deep And Hollow.mp3"
+    }
+}

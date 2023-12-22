@@ -3,6 +3,20 @@ import os
 import random
 import time
 import keyboard
+import subprocess
+from json_m import Operation, json_file
+from config import update_mixer
+
+# Initialize Pygame
+pygame.init()
+
+# Create a Pygame mixer
+pygame.mixer.init()
+
+# Initialize Pygame mixer.music
+update_mixer(pygame.mixer)
+
+
 
 def load_sounds_from_folder(folder_path):
     sounds = []
@@ -14,10 +28,6 @@ def load_sounds_from_folder(folder_path):
     return sounds
 
 def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_sounds):
-    pygame.init()
-
-    # Create a Pygame mixer
-    pygame.mixer.init()
 
     # Get a list of music files in the specified folder
     music_files = [f for f in os.listdir(music_folder) if f.endswith('.mp3')]
@@ -42,31 +52,40 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
     # Play the first track
     print(f"Playing : {music_files[current_index]}")
     pygame.mixer.music.play()
+    # Update the mixer in the config module
+    
 
     # Set the initial volume (between 0.0 and 1.0)
     volume = 0.5
     pygame.mixer.music.set_volume(volume)
 
     # Keep the script running to allow playback
+
+    json_file("config.json", Operation.CHANGE, "track", {
+                    "current": music_files[current_index],
+                    "next": music_files[current_index + 1],
+                    "previous": music_files[current_index - 1]
+                })
     is_up = True
+    #update_mixer(pygame.mixer.music)
     while True:
+        
         pressed_keys = list(keyboard._pressed_events)
         for event in pygame.event.get():
-            if keyboard.is_pressed("d") and keyboard.is_pressed("shift") and keyboard.is_pressed("alt"):
-                # Switch to the next track
-                current_index = (current_index + 1) % len(music_files)
-                current_music = os.path.join(music_folder, music_files[current_index])
-                print(f"Playing : {music_files[current_index]}")
-                pygame.mixer.music.load(current_music)
-
             if event.type == MUSIC_END:
                 # Switch to the next track
+                json_file("config.json", Operation.CHANGE, "track", {
+                    "current": music_files[current_index],
+                    "next": music_files[current_index + 1],
+                    "previous": music_files[current_index - 1]
+                })
                 current_index = (current_index + 1) % len(music_files)
                 current_music = os.path.join(music_folder, music_files[current_index])
                 print(f"Playing : {music_files[current_index]}")
                 pygame.mixer.music.load(current_music)
                 
                 pygame.mixer.music.play()
+                #update_mixer(pygame.mixer.music)
         if len(pressed_keys) == 0:
             is_up = True
 
@@ -108,7 +127,9 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
 # Replace 'path/to/your/meditation_music' with the actual path to your music folder
 # Replace 'path/to/enter_key_press_sound.wav' with the actual path to your Enter key press sound file
 # Replace 'path/to/other_key_press_sounds' with the actual path to the folder containing other key press sound files
-music_folder = 'C:/Users/Amine/Documents/VS/Python/StartUp Sound/music'
-enter_key_press_sound = 'C:/Users/Amine/Documents/VS/Python/StartUp Sound/effects/Enter Key Sound.mp3'
-other_key_press_sounds_folder = 'C:/Users/Amine/Documents/VS/Python/StartUp Sound/effects'
+music_folder = f'{os.path.dirname(os.path.abspath(__file__))}\music'
+enter_key_press_sound = f'{os.path.dirname(os.path.abspath(__file__))}\effects\Enter Key Sound.mp3'
+other_key_press_sounds_folder = f'{os.path.dirname(os.path.abspath(__file__))}\effects'
+
+subprocess.Popen([json_file("config.json", Operation.GET, "app")["python"],json_file("config.json", Operation.GET, "app")["config_script_path"]])
 play_meditation_music(music_folder, enter_key_press_sound, other_key_press_sounds_folder)

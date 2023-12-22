@@ -1,0 +1,15 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="playBtn" onclick="playMusic()">Play</button>
+    <button id="stopBtn" onclick="stopMusic()">Stop</button>
+    <button id="nextBtn">Next</button>
+    <button id="prevBtn">Prev</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
