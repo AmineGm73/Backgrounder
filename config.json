@@ -1,13 +1,15 @@
 {
     "app": {
-        "app_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder",
-        "music_player_script_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder\\music_player.py",
-        "config_script_path": "C:\\Users\\Amine\\Documents\\GitHub\\Backgrounder\\config.py",
-        "python": "C:\\Program Files\\Python\\python.EXE"
+        "app_path": "C:\\Users\\mohvfx\\Documents\\VS\\Python\\Backgrounder-main\\Backgrounder-main",
+        "music_player_script_path": "C:\\Users\\mohvfx\\Documents\\VS\\Python\\Backgrounder-main\\Backgrounder-main\\music_player.py",
+        "config_script_path": "C:\\Users\\mohvfx\\Documents\\VS\\Python\\Backgrounder-main\\Backgrounder-main\\config.py",
+        "python": "C:\\Users\\mohvfx\\Documents\\VS\\Python\\Backgrounder-main\\Backgrounder-main\\venv\\Scripts\\python.EXE"
     },
     "track": {
-        "current": "[SPOTIFY-DOWNLOADER.COM] Diya.mp3",
-        "next": "[SPOTIFY-DOWNLOADER.COM] Dree.mp3",
-        "previous": "[SPOTIFY-DOWNLOADER.COM] Deep And Hollow.mp3"
+        "current": "[SPOTIFY-DOWNLOADER.COM] Grow.mp3",
+        "next": "[SPOTIFY-DOWNLOADER.COM] Hesperus.mp3",
+        "previous": "[SPOTIFY-DOWNLOADER.COM] Going Back.mp3",
+        "playing": true,
+        "canChange": false
     }
 }

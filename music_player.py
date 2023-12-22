@@ -5,7 +5,12 @@ import time
 import keyboard
 import subprocess
 from json_m import Operation, json_file
-from config import update_mixer
+import sys
+import eyed3
+from PIL import Image
+from io import BytesIO
+import psutil
+import os
 
 # Initialize Pygame
 pygame.init()
@@ -13,9 +18,36 @@ pygame.init()
 # Create a Pygame mixer
 pygame.mixer.init()
 
-# Initialize Pygame mixer.music
-update_mixer(pygame.mixer)
 
+playing = json_file("config.json", Operation.GET, "track")["playing"]
+can_stop = False
+
+
+def extract_cover_image(mp3_file_path, output_image_path):
+    audiofile = eyed3.load(mp3_file_path)
+
+    if audiofile.tag and audiofile.tag.frame_set:
+        # Get the first image frame from the tag
+        image_frame = audiofile.tag.frame_set.get(b'APIC', None)
+
+        if image_frame:
+            # Extract the image data
+            image_data = image_frame[0].image_data
+
+            # Convert the image data to a BytesIO object
+            image_io = BytesIO(image_data)
+
+            # Open the image using PIL
+            image = Image.open(image_io)
+
+            # Save the image to a file
+            image.save(output_image_path, format="PNG")
+
+            print(f"Cover image extracted and saved to: {output_image_path}")
+        else:
+            print("No cover image found in the MP3 file.")
+    else:
+        print("No tag information found in the MP3 file.")
 
 
 def load_sounds_from_folder(folder_path):
@@ -28,6 +60,8 @@ def load_sounds_from_folder(folder_path):
     return sounds
 
 def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_sounds):
+    global playing
+    global can_stop
 
     # Get a list of music files in the specified folder
     music_files = [f for f in os.listdir(music_folder) if f.endswith('.mp3')]
@@ -52,6 +86,7 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
     # Play the first track
     print(f"Playing : {music_files[current_index]}")
     pygame.mixer.music.play()
+    playing = True
     # Update the mixer in the config module
     
 
@@ -64,12 +99,45 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
     json_file("config.json", Operation.CHANGE, "track", {
                     "current": music_files[current_index],
                     "next": music_files[current_index + 1],
-                    "previous": music_files[current_index - 1]
+                    "previous": music_files[current_index - 1],
+                    "playing": playing,
+                    "canChange": can_stop
                 })
     is_up = True
+
+    extract_cover_image("music\\"+music_files[current_index], "music\\cover.png")
+
     #update_mixer(pygame.mixer.music)
     while True:
-        
+        track_dict = json_file("config.json", Operation.GETALL)
+        time.sleep(0.01)
+        playing = json_file("config.json", Operation.GETALL)["track"]["playing"]
+        can_stop = json_file("config.json", Operation.GETALL)["track"]["canChange"]
+
+        if playing == False and can_stop == True and pygame.mixer.music.get_busy() == True:
+            pygame.mixer.music.pause()
+            can_stop = False
+            new_value = {
+                "current": music_files[current_index],
+                "next": music_files[current_index + 1],
+                "previous": music_files[current_index - 1],
+                "playing": playing,
+                "canChange": can_stop
+            }
+            json_file("config.json", Operation.CHANGE, "track", new_value)
+        elif playing and can_stop and not pygame.mixer.music.get_busy():
+            pygame.mixer.music.unpause()
+            can_stop = False
+            new_value = {
+                "current": music_files[current_index],
+                "next": music_files[current_index + 1],
+                "previous": music_files[current_index - 1],
+                "playing": playing,
+                "canChange": can_stop
+            }
+            json_file("config.json", Operation.CHANGE, "track", new_value)
+
+
         pressed_keys = list(keyboard._pressed_events)
         for event in pygame.event.get():
             if event.type == MUSIC_END:
@@ -77,7 +145,9 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
                 json_file("config.json", Operation.CHANGE, "track", {
                     "current": music_files[current_index],
                     "next": music_files[current_index + 1],
-                    "previous": music_files[current_index - 1]
+                    "previous": music_files[current_index - 1],
+                    "playing": playing,
+                    "canChange": can_stop
                 })
                 current_index = (current_index + 1) % len(music_files)
                 current_music = os.path.join(music_folder, music_files[current_index])
@@ -85,6 +155,8 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
                 pygame.mixer.music.load(current_music)
                 
                 pygame.mixer.music.play()
+                playing = True
+                extract_cover_image("music\\"+music_files[current_index], "music\\cover.png")
                 #update_mixer(pygame.mixer.music)
         if len(pressed_keys) == 0:
             is_up = True
@@ -94,18 +166,18 @@ def play_meditation_music(music_folder, enter_key_press_sound, other_key_press_s
 
         for key in pressed_keys:
             if key == 28 and is_up:
-                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.6)
+                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.4)
                 enter_key_press_sound.play()
                 time.sleep(0.1)  # Optional delay to avoid rapid key presses
                 is_up = False
             elif key == 14 and is_up:
-                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.4)
+                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.2)
                 enter_key_press_sound.play()
                 time.sleep(0.15)
 
             elif is_up:
                 # Play a random sound from the other key press sounds
-                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.4)
+                pygame.mixer.Sound.set_volume(enter_key_press_sound, 0.2)
                 random_sound = random.choice(other_key_press_sounds)
                 random_sound.play()  # Optional delay to avoid rapid key presses
                 is_up = False
@@ -133,3 +205,10 @@ other_key_press_sounds_folder = f'{os.path.dirname(os.path.abspath(__file__))}\e
 
 subprocess.Popen([json_file("config.json", Operation.GET, "app")["python"],json_file("config.json", Operation.GET, "app")["config_script_path"]])
 play_meditation_music(music_folder, enter_key_press_sound, other_key_press_sounds_folder)
+for proc in psutil.process_iter():
+        # check whether the process name matches
+        if proc.name() == "Backgrounder Config":
+            proc.kill()
+
+os.kill()
+sys.exit()

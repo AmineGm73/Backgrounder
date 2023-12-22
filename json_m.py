@@ -6,17 +6,17 @@ class Operation(Enum):
   CHANGE = 'change'
   REMOVE = 'remove'
   GET = 'get'
+  GETALL = 'getall'
 
 
 def json_file(file_path, operation, key=None, new_value=None):
-  print("JSOOON!!!!")
   try:
     with open(file_path, 'r') as file:
       json_data = json.load(file)
 
     if operation == Operation.GET and key is not None:
       if isinstance(json_data, dict):
-        return json_data.get(key, None)
+        return json_data.get(key)
       elif isinstance(json_data, list):
         for item in json_data:
           if isinstance(item, dict):
@@ -80,6 +80,9 @@ def json_file(file_path, operation, key=None, new_value=None):
             item for item in json_data
             if isinstance(item, dict) and key not in item
         ]
+
+    elif operation == Operation.GETALL:
+      return json_data
 
     with open(file_path, 'w') as file:
       json.dump(json_data, file, indent=4)

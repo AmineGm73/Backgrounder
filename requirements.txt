@@ -1,7 +1,8 @@
 keyboard
 pygame
-PyQt5
-Flask
+flask
 flask-socketio
-tkinterweb
-tkinter
+webview
+psutil
+eyed3
+PIL
